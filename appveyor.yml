@@ -22,9 +22,7 @@ install:
 
 build_script:
   - ps: gitversion /output json /showvariable FullSemVer | Set-Content VERSION -PassThru
-  - go test -v ./...
-  - promu build -v
-  - gometalinter --vendor --config gometalinter.config ./...
+  - make test build lint
   - ps: |
       $ErrorActionPreference = "Stop"
       if($env:APPVEYOR_REPO_TAG -eq "True") {
