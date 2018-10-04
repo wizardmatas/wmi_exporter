@@ -1,6 +1,3 @@
-// returns data points from Win32_OperatingSystem
-// https://msdn.microsoft.com/en-us/library/aa394239 - Win32_OperatingSystem class
-
 package collector
 
 import (
@@ -122,6 +119,8 @@ func (c *OSCollector) Collect(ch chan<- prometheus.Metric) error {
 	return nil
 }
 
+// Win32_OperatingSystem docs:
+// - https://msdn.microsoft.com/en-us/library/aa394239 - Win32_OperatingSystem class
 type Win32_OperatingSystem struct {
 	FreePhysicalMemory      uint64
 	FreeSpaceInPagingFiles  uint64

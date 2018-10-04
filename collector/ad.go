@@ -1,5 +1,3 @@
-// returns data points from Win32_PerfRawData_DirectoryServices_DirectoryServices
-// Partial docs: https://msdn.microsoft.com/en-us/library/ms803980.aspx
 package collector
 
 import (
@@ -462,6 +460,8 @@ func (c *ADCollector) Collect(ch chan<- prometheus.Metric) error {
 	return nil
 }
 
+// Win32_PerfRawData_DirectoryServices_DirectoryServices docs:
+// - https://msdn.microsoft.com/en-us/library/ms803980.aspx
 type Win32_PerfRawData_DirectoryServices_DirectoryServices struct {
 	Name string
 
