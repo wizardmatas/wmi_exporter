@@ -361,7 +361,7 @@ func NewMSSQLCollector() (Collector, error) {
 
 	const subsystem = "mssql"
 
-	MSSQLCollector := MSSQLCollector{
+	mssqlCollector := MSSQLCollector{
 		// meta
 		mssqlScrapeDurationDesc: prometheus.NewDesc(
 			prometheus.BuildFQName(Namespace, subsystem, "collector_duration_seconds"),
@@ -1633,17 +1633,17 @@ func NewMSSQLCollector() (Collector, error) {
 		mssqlInstances: getMSSQLInstances(),
 	}
 
-	MSSQLCollector.mssqlCollectors = MSSQLCollector.getMSSQLCollectors()
+	mssqlCollector.mssqlCollectors = mssqlCollector.getMSSQLCollectors()
 
 	if *mssqlPrintCollectors {
 		fmt.Printf("Available SQLServer Classes:\n")
-		for name := range MSSQLCollector.mssqlCollectors {
+		for name := range mssqlCollector.mssqlCollectors {
 			fmt.Printf(" - %s\n", name)
 		}
 		os.Exit(0)
 	}
 
-	return &MSSQLCollector, nil
+	return &mssqlCollector, nil
 }
 
 type mssqlCollectorFunc func(ch chan<- prometheus.Metric, sqlInstance string) (*prometheus.Desc, error)
