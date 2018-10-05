@@ -237,12 +237,16 @@ fileLoop:
 		}
 		var parser expfmt.TextParser
 		parsedFamilies, err := parser.TextToMetricFamilies(carriageReturnFilteringReader{r: file})
-		file.Close()
 		if err != nil {
 			log.Errorf("Error parsing %q: %v", path, err)
 			error = 1.0
 			continue
 		}
+		err = file.Close()
+		if err != nil {
+			log.Warnf("Error closing file: %v", err)
+		}
+
 		for _, mf := range parsedFamilies {
 			for _, m := range mf.Metric {
 				if m.TimestampMs != nil {

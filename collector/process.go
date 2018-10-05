@@ -191,7 +191,10 @@ func (c *ProcessCollector) collect(ch chan<- prometheus.Metric) (*prometheus.Des
 
 	var dst_wp []WorkerProcess
 	q_wp := queryAll(&dst_wp)
-	wmi.QueryNamespace(q_wp, &dst_wp, "root\\WebAdministration")
+	err := wmi.QueryNamespace(q_wp, &dst_wp, "root\\WebAdministration")
+	if err != nil {
+		log.Debugf("Could not query WebAdministration namespace for IIS worker processes: %v. Skipping", err)
+	}
 
 	for _, process := range dst {
 
