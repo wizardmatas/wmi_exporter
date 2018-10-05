@@ -18,7 +18,7 @@ install:
   - go get -u github.com/prometheus/promu
   - go get -u github.com/alecthomas/gometalinter
   - gometalinter --install
-  - choco install gitversion.portable -y
+  - choco install gitversion.portable gnuwin32-make.portable -y
 
 build_script:
   - ps: gitversion /output json /showvariable FullSemVer | Set-Content VERSION -PassThru
