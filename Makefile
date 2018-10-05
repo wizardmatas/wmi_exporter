@@ -1,3 +1,5 @@
+export GOOS=windows
+
 fmt:
 	gofmt -l -w -s .
 
