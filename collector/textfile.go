@@ -236,6 +236,11 @@ fileLoop:
 			error = 1.0
 			continue
 		}
+		defer func() {
+			err = file.Close()
+			log.Errorf("Failed to close file: %v", err)
+		}()
+
 		var parser expfmt.TextParser
 		r := utfbom.SkipOnly(carriageReturnFilteringReader{r: file})
 		parsedFamilies, err := parser.TextToMetricFamilies(r)
@@ -244,7 +249,6 @@ fileLoop:
 			error = 1.0
 			continue
 		}
-		err = file.Close()
 		if err != nil {
 			log.Warnf("Error closing file: %v", err)
 		}
