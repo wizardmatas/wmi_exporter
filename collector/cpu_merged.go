@@ -11,7 +11,7 @@ import (
 )
 
 func init() {
-	Factories["cpu"] = NewCPUCollectormc
+	Factories["cpu_merged"] = NewCPUCollectormc
 }
 
 // A cpu_infoCollector is a Prometheus collector for WMI Win32_PerfRawData_Counters_ProcessorInformation metrics
