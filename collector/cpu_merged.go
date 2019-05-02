@@ -24,7 +24,7 @@ type CPUCollectormc struct {
 
 // NewCPUCollectormc constructs a new CPUCollectormc
 func NewCPUCollectormc() (Collector, error) {
-	const subsystem = "cpu"
+	const subsystem = "cpu_merged"
 	return &CPUCollectormc{
 		CStateSecondsTotal: prometheus.NewDesc(
 			prometheus.BuildFQName(Namespace, subsystem, "cstate_seconds_total"),
