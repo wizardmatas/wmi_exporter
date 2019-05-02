@@ -112,7 +112,7 @@ func (c *CPUCollector) collect(ch chan<- prometheus.Metric) (*prometheus.Desc, e
 
 		core := data.Name
 		// These are only available from Win32_PerfRawData_Counters_ProcessorInformation, which is only available from Win2008R2+
-		ch <- prometheus.MustNewConstMetric(
+		/*ch <- prometheus.MustNewConstMetric(
 			c.ProcessorFrequency,
 			prometheus.GaugeValue,
 			float64(data.ProcessorFrequency),
@@ -123,7 +123,7 @@ func (c *CPUCollector) collect(ch chan<- prometheus.Metric) (*prometheus.Desc, e
 			prometheus.GaugeValue,
 			float64(data.PercentofMaximumFrequency)/100*float64(data.ProcessorFrequency),
 			socket, core,
-		)
+		)*/
 
 		ch <- prometheus.MustNewConstMetric(
 			c.CStateSecondsTotal,
