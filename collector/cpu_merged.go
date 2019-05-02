@@ -3,15 +3,37 @@
 package collector
 
 import (
+	"strconv"
 	"strings"
 
 	"github.com/StackExchange/wmi"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/common/log"
+	"golang.org/x/sys/windows/registry"
 )
 
 func init() {
 	Factories["cpu_merged"] = NewCPUCollectormc
+}
+
+//A function to get windows version from registry
+
+func getWindowsVersion() float64 {
+	k, err := registry.OpenKey(registry.LOCAL_MACHINE, `SOFTWARE\Microsoft\Windows NT\CurrentVersion`, registry.QUERY_VALUE)
+	if err != nil {
+		log.Warn("Couldn't open registry", err)
+	}
+	defer k.Close()
+
+	currentv, _, err := k.GetStringValue("CurrentVersion")
+	if err != nil {
+		log.Warn("Couldn't open registry to determine current Windows version:", err)
+	}
+
+	log.Info("Detected Windows %d.%d\n", currentv)
+	currentv_flt, err := strconv.ParseFloat(currentv, 64)
+	//	log.Info(currentv_flt)
+	return currentv_flt
 }
 
 // A cpu_infoCollector is a Prometheus collector for WMI Win32_PerfRawData_Counters_ProcessorInformation metrics
@@ -98,8 +120,33 @@ type Win32_PerfRawData_Counters_ProcessorInformation struct {
 	ProcessorStateFlags         uint32
 }
 
+type Win32_PerfRawData_PerfOS_Processor struct {
+	Name                  string
+	C1TransitionsPersec   uint64
+	C2TransitionsPersec   uint64
+	C3TransitionsPersec   uint64
+	DPCRate               uint32
+	DPCsQueuedPersec      uint32
+	InterruptsPersec      uint32
+	PercentC1Time         uint64
+	PercentC2Time         uint64
+	PercentC3Time         uint64
+	PercentDPCTime        uint64
+	PercentIdleTime       uint64
+	PercentInterruptTime  uint64
+	PercentPrivilegedTime uint64
+	PercentProcessorTime  uint64
+	PercentUserTime       uint64
+}
+
 func (c *CPUCollectormc) collect(ch chan<- prometheus.Metric) (*prometheus.Desc, error) {
-	var dst []Win32_PerfRawData_Counters_ProcessorInformation
+	version := getWindowsVersion()
+	// Windows version by number https://docs.microsoft.com/en-us/windows/desktop/sysinfo/operating-system-version
+	if version > 6.05 {
+		var dst []Win32_PerfRawData_Counters_ProcessorInformation
+	} else {
+		var dst []Win32_PerfRawData_PerfOS_Processor
+	}
 	q := queryAll(&dst)
 	if err := wmi.Query(q, &dst); err != nil {
 		return nil, err
