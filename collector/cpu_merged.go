@@ -141,11 +141,13 @@ type Win32_PerfRawData_PerfOS_Processor struct {
 
 func (c *CPUCollectormc) collect(ch chan<- prometheus.Metric) (*prometheus.Desc, error) {
 	version := getWindowsVersion()
+	var dst
 	// Windows version by number https://docs.microsoft.com/en-us/windows/desktop/sysinfo/operating-system-version
 	if version > 6.05 {
-		var dst []Win32_PerfRawData_Counters_ProcessorInformation
+		var dst := []Win32_PerfRawData_Counters_ProcessorInformation
+		q := queryAll(&dst)
 	} else {
-		var dst []Win32_PerfRawData_PerfOS_Processor
+		var dst := []Win32_PerfRawData_PerfOS_Processor
 	}
 	q := queryAll(&dst)
 	if err := wmi.Query(q, &dst); err != nil {
