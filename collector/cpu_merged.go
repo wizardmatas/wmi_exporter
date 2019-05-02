@@ -11,21 +11,21 @@ import (
 )
 
 func init() {
-	Factories["cpu"] = NewCPUCollector
+	Factories["cpu"] = NewCPUCollectormc
 }
 
 // A cpu_infoCollector is a Prometheus collector for WMI Win32_PerfRawData_Counters_ProcessorInformation metrics
-type CPUCollector struct {
+type CPUCollectormc struct {
 	CStateSecondsTotal *prometheus.Desc
 	TimeTotal          *prometheus.Desc
 	InterruptsTotal    *prometheus.Desc
 	DPCsTotal          *prometheus.Desc
 }
 
-// NewCPUCollector constructs a new CPUCollector
-func NewCPUCollector() (Collector, error) {
+// NewCPUCollectormc constructs a new CPUCollectormc
+func NewCPUCollectormc() (Collector, error) {
 	const subsystem = "cpu"
-	return &CPUCollector{
+	return &CPUCollectormc{
 		CStateSecondsTotal: prometheus.NewDesc(
 			prometheus.BuildFQName(Namespace, subsystem, "cstate_seconds_total"),
 			"Time spent in low-power idle state",
@@ -56,7 +56,7 @@ func NewCPUCollector() (Collector, error) {
 
 // Collect sends the metric values for each metric
 // to the provided prometheus Metric channel.
-func (c *CPUCollector) Collect(ch chan<- prometheus.Metric) error {
+func (c *CPUCollectormc) Collect(ch chan<- prometheus.Metric) error {
 	if desc, err := c.collect(ch); err != nil {
 		log.Error("failed collecting cpu_info metrics:", desc, err)
 		return err
@@ -98,7 +98,7 @@ type Win32_PerfRawData_Counters_ProcessorInformation struct {
 	ProcessorStateFlags         uint32
 }
 
-func (c *CPUCollector) collect(ch chan<- prometheus.Metric) (*prometheus.Desc, error) {
+func (c *CPUCollectormc) collect(ch chan<- prometheus.Metric) (*prometheus.Desc, error) {
 	var dst []Win32_PerfRawData_Counters_ProcessorInformation
 	q := queryAll(&dst)
 	if err := wmi.Query(q, &dst); err != nil {
