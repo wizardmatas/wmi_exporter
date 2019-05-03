@@ -172,7 +172,7 @@ func (c *CPUCollectormc) collect(ch chan<- prometheus.Metric) (*prometheus.Desc,
 				float64(data.PercentC3Time)*ticksToSecondsScaleFactor,
 				core, "c3",
 			)
-	
+
 			ch <- prometheus.MustNewConstMetric(
 				c.TimeTotal,
 				prometheus.CounterValue,
@@ -203,7 +203,7 @@ func (c *CPUCollectormc) collect(ch chan<- prometheus.Metric) (*prometheus.Desc,
 				float64(data.PercentUserTime)*ticksToSecondsScaleFactor,
 				core, "user",
 			)
-	
+
 			ch <- prometheus.MustNewConstMetric(
 				c.InterruptsTotal,
 				prometheus.CounterValue,
@@ -217,7 +217,7 @@ func (c *CPUCollectormc) collect(ch chan<- prometheus.Metric) (*prometheus.Desc,
 				core,
 			)
 		}
-	
+
 		return nil, nil
 
 	} else {
@@ -313,3 +313,4 @@ func (c *CPUCollectormc) collect(ch chan<- prometheus.Metric) (*prometheus.Desc,
 
 		return nil, nil
 	}
+}
