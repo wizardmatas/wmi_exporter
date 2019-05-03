@@ -144,6 +144,7 @@ func (c *CPUCollectormc) collect(ch chan<- prometheus.Metric) (*prometheus.Desc,
 	// Windows version by number https://docs.microsoft.com/en-us/windows/desktop/sysinfo/operating-system-version
 	if version > 6.05 {
 		var dst []Win32_PerfRawData_Counters_ProcessorInformation
+		log.Info("What is dst before q", dst)
 		q := queryAll(&dst)
 		if err := wmi.Query(q, &dst); err != nil {
 			return nil, err
