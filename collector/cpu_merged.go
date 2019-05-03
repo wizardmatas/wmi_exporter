@@ -42,6 +42,7 @@ type CPUCollectormc struct {
 	TimeTotal          *prometheus.Desc
 	InterruptsTotal    *prometheus.Desc
 	DPCsTotal          *prometheus.Desc
+	ProcessorFrequency *prometheus.Desc
 }
 
 // NewCPUCollectormc constructs a new CPUCollectormc
