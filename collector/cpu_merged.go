@@ -219,7 +219,6 @@ func (c *CPUCollectormc) collect(ch chan<- prometheus.Metric) (*prometheus.Desc,
 		}
 	
 		return nil, nil
-	}
 
 	} else {
 		var dst []Win32_PerfRawData_PerfOS_Processor
