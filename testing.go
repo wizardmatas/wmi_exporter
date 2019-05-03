@@ -1,12 +1,12 @@
-package main
+package collector
 
 import (
 	//	"strings"
 	"fmt"
-	"strings"
-	//	"github.com/StackExchange/wmi"
 	"strconv"
+	"strings"
 
+	"github.com/StackExchange/wmi"
 	"github.com/prometheus/common/log"
 	"golang.org/x/sys/windows/registry"
 )
@@ -40,6 +40,16 @@ func getWindowsVersion() float64 {
 	major_flt, err := strconv.ParseFloat(major, 64)
 	log.Info(major_flt)
 	return major_flt
+}
+
+type Win32_PerfRawData_Counters_ProcessorInformation struct {
+	Name                  string
+	AverageIdleTime       uint64
+	C1TransitionsPersec   uint64
+	C2TransitionsPersec   uint64
+	C3TransitionsPersec   uint64
+	ClockInterruptsPersec uint32
+	DPCRate               uint32
 }
 
 func wmitest() {
