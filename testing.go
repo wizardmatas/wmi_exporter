@@ -10,7 +10,8 @@ import (
 
 
 func main() {
-    version := getWindowsVersion()
+	version := getWindowsVersion()
+	wmitesting := wmitest()
     fmt.Println("hello world")
 	fmt.Println(version)
 	if version > 8 {
@@ -40,6 +41,23 @@ func getWindowsVersion()(float64) {
 	return major_flt
 	}
 	
+
+
+func wmitest() {
+	var dst []Win32_PerfRawData_Counters_ProcessorInformation
+	q := queryAll(&dst)
+	log.Info(q)
+	if err := wmi.Query(q, &dst); err != nil {
+		return nil, err
+	}
+	for _, data := range dst {
+		log.Info(data)
+		if strings.Contains(data.Name, "_Total") {
+			continue
+		}
+
+
+
 
 
 
