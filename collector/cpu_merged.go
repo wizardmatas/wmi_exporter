@@ -148,6 +148,8 @@ func (c *CPUCollectormc) collect(ch chan<- prometheus.Metric) (*prometheus.Desc,
 		if err := wmi.Query(q, &dst); err != nil {
 			return nil, err
 		}
+		log.Info("What is q", q)
+		log.Info("What is dst", dst)
 		for _, data := range dst {
 			if strings.Contains(data.Name, "_Total") {
 				continue
