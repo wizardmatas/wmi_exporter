@@ -73,6 +73,12 @@ func NewCPUCollectormc() (Collector, error) {
 			[]string{"core"},
 			nil,
 		),
+		ProcessorFrequency: prometheus.NewDesc(
+			prometheus.BuildFQName(Namespace, subsystem, "core_frequence_MHz"),
+			"Core frequency in megahertz",
+			[]string{"core"},
+			nil,
+		),
 	}, nil
 }
 
@@ -156,7 +162,13 @@ func (c *CPUCollectormc) collect(ch chan<- prometheus.Metric) (*prometheus.Desc,
 				continue
 			}
 			core := data.Name
-
+			// These are only available from Win32_PerfRawData_Counters_ProcessorInformation, which is only available from Win2008R2+
+			ch <- prometheus.MustNewConstMetric(
+				c.ProcessorFrequency,
+				prometheus.GaugeValue,
+				float64(data.ProcessorFrequency),
+				core,
+			)
 			ch <- prometheus.MustNewConstMetric(
 				c.CStateSecondsTotal,
 				prometheus.CounterValue,
@@ -236,19 +248,6 @@ func (c *CPUCollectormc) collect(ch chan<- prometheus.Metric) (*prometheus.Desc,
 			}
 
 			core := data.Name
-			// These are only available from Win32_PerfRawData_Counters_ProcessorInformation, which is only available from Win2008R2+
-			/*ch <- prometheus.MustNewConstMetric(
-				c.ProcessorFrequency,
-				prometheus.GaugeValue,
-				float64(data.ProcessorFrequency),
-				socket, core,
-			)
-			ch <- prometheus.MustNewConstMetric(
-				c.MaximumFrequency,
-				prometheus.GaugeValue,
-				float64(data.PercentofMaximumFrequency)/100*float64(data.ProcessorFrequency),
-				socket, core,
-			)*/
 
 			ch <- prometheus.MustNewConstMetric(
 				c.CStateSecondsTotal,
